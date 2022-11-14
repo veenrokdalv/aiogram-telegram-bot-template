@@ -30,7 +30,6 @@ redis = ["redis (>=4.3.4,<5.0.0)"]
 [package.source]
 type = "url"
 url = "https://github.com/aiogram/aiogram/archive/refs/heads/dev-3.x.zip"
-
 [[package]]
 name = "aiohttp"
 version = "3.8.3"
