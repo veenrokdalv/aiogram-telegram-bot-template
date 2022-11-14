@@ -35,6 +35,7 @@ async def main():
 
     await dispatcher.start_polling(*bots, **extra_data)
 
+
 if __name__ == '__main__':
     try:
         asyncio.run(main())

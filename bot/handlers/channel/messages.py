@@ -12,4 +12,3 @@ from aiogram import Dispatcher
 def setup(*, dispatcher: Dispatcher):
     # dispatcher.message.register(handler_new_message, ChatTypesFilter('channel'))
     pass
-
