@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "simple": {
+      "format": "%(asctime)s | %(levelname)8s | %(name)s | %(message)s",
+      "datefm": "%d/%m/%Y %H:%M:%S"
+    },
+    "detail": {
+      "format": "%(asctime)s | %(levelname)8s | %(name)s | %(module)s:%(lineno)d | %(funcName)s  | %(message)s",
+      "datefm": "%d/%m/%Y %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "console": {
+      "level": "DEBUG",
+      "formatter": "simple",
+      "class": "logging.StreamHandler"
+    },
+    "file": {
+      "level": "INFO",
+      "formatter": "detail",
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "filename": "./logs.log",
+      "when": "d",
+      "interval": 30,
+      "backupCount": 4,
+      "utc": true
+    }
+  },
+  "loggers": {
+    "root": {
+      "handlers": [
+        "console"
+      ],
+      "level": "DEBUG"
+    },
+    "bot": {
+      "handlers": [
+        "console",
+        "file"
+      ],
+      "level": "DEBUG",
+      "propagate": 0
+    },
+    "services": {
+      "handlers": [
+        "console",
+        "file"
+      ],
+      "level": "DEBUG",
+      "propagate": 0
+    }
+  }
+}
