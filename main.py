@@ -6,16 +6,14 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.strategy import FSMStrategy
 
 import loggers
-from bot import handlers, middlewares
 
 logger = logging.getLogger(__name__)
 
 
 async def main():
     """Point of entry"""
+    from bot import handlers, middlewares
     from config import settings
-
-    loggers.setup()
 
     logger.debug('Building bots')
 
@@ -37,6 +35,7 @@ async def main():
 
 
 if __name__ == '__main__':
+    loggers.setup()
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

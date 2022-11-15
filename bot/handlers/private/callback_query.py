@@ -1,12 +1,15 @@
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Router
+
+router = Router()
 
 
-# async def handler_counter(callback_query: CallbackQuery):
-#     callback_data = YourCallbackData.unpack(callback_query.data)
+# from aiogram.types import CallbackQuery
+# from bot.utils.throttling import rate_limit
 #
-#     await callback_query.answer()
-
+# @rate_limit()
+# @router.callback_query()
+# async def handler_counter(callback_query: CallbackQuery):
+#     await callback_query.answer('Text')
 
 def setup(*, dispatcher: Dispatcher):
-    # dispatcher.callback_query.register(handler_counter, YourCallbackData.filter(), ChatTypesFilter('private'))
-    pass
+    dispatcher.include_router(router)

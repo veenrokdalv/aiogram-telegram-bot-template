@@ -1,4 +1,5 @@
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from environ import Env
 
@@ -8,10 +9,17 @@ ENV_FILE = BASE_DIR / '.env'
 LOGGING_CONF_FILE = BASE_DIR / 'logging.conf.json'
 
 env = Env()
-
 env.read_env(str(ENV_FILE))
 
-TELEGRAM_BOT_TOKENS = env.list('TELEGRAM_BOT_TOKENS')
 PARSE_MODE = 'HTML'
+THROTTLING_KEY = '_throttling_key'
+TELEGRAM_BOT_TOKENS = env.list('TELEGRAM_BOT_TOKENS')
+DEFAULT_TIME_ZONE = ZoneInfo('Europe/Moscow')
+
+SHORT_DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
+
+THROTTLES = {
+    'default': '5/10s'
+}
 
 del env

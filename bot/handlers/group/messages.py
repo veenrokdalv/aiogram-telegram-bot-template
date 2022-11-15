@@ -1,10 +1,7 @@
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Router
 
-
-# async def handler_command_start(message: Message):
-#     await message.answer(text=f'Hello, {message.from_user.full_name}',)
+router = Router()
 
 
 def setup(*, dispatcher: Dispatcher):
-    # dispatcher.message.register(handler_command_start, ChatTypesFilter('group', 'supergroup'))
-    pass
+    dispatcher.include_router(router)

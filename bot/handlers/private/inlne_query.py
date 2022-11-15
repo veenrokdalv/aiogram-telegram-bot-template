@@ -1,6 +1,11 @@
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Router
 
+router = Router()
 
+# from aiogram.types import InlineQuery, InputTextMessageContent, InlineQueryResultArticle
+# from bot.filters import ChatTypesFilter
+
+# @router.inline_query(ChatTypesFilter('sender'))
 # async def handler_query_empty_from_sender(inline_query: InlineQuery):
 #     results = [
 #         InlineQueryResultArticle(
@@ -17,6 +22,7 @@ from aiogram import Dispatcher
 #     await inline_query.answer(results=results, )
 #
 #
+# @router.inline_query(ChatTypesFilter('private'))
 # async def handler_query_empty_from_private(inline_query: InlineQuery):
 #     results = [
 #         InlineQueryResultArticle(
@@ -29,11 +35,10 @@ from aiogram import Dispatcher
 #             )
 #         )
 #     ]
-#
+
 #     await inline_query.answer(results=results, )
 
 
 def setup(*, dispatcher: Dispatcher):
-    # dispatcher.inline_query.register(handler_query_empty_from_sender, ChatTypesFilter('sender'))
-    # dispatcher.inline_query.register(handler_query_empty_from_private, ChatTypesFilter('private'))
+    dispatcher.include_router(router)
     pass

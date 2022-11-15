@@ -10,6 +10,8 @@ packages = [{include = "aiogram_telegram_bot_template"}]
 python = "^3.10"
 aiogram = {url = "https://github.com/aiogram/aiogram/archive/refs/heads/dev-3.x.zip"}
 python-environ = "^0.4.54"
+cachetools = "^5.2.0"
+pytimeparse = "^1.1.8"
 
 
 [build-system]
