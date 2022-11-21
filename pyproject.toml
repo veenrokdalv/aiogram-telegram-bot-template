@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["veenrokdalv  <veenrokdalv@gmail.com>"]
 readme = "README.md"
-packages = [{include = "aiogram_telegram_bot_template"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
