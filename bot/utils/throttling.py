@@ -4,10 +4,6 @@ import loggers
 from config import settings
 
 
-class Throttling(Exception):
-    pass
-
-
 def rate_limit(*, name: str = 'default'):
     _validate_rate_limit(name)
 
