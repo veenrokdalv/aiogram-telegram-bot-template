@@ -4,7 +4,8 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.strategy import FSMStrategy
-
+from bot import handlers, middlewares
+from config import settings
 import loggers
 
 logger = logging.getLogger(__name__)
@@ -12,8 +13,6 @@ logger = logging.getLogger(__name__)
 
 async def main():
     """Point of entry"""
-    from bot import handlers, middlewares
-    from config import settings
 
     logger.debug('Building bots')
 
