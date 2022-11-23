@@ -43,13 +43,6 @@
       "level": "DEBUG",
       "propagate": 0
     },
-    "services": {
-      "handlers": [
-        "console",
-        "file"
-      ],
-      "level": "DEBUG",
-      "propagate": 0
-    }
+
   }
 }

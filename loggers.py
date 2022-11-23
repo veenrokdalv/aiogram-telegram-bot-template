@@ -4,9 +4,7 @@ import logging.config
 
 from config import settings
 
-root = logging.getLogger()
 bot = logging.getLogger('bot')
-services = logging.getLogger('services')
 
 
 def setup():
