@@ -1,16 +1,16 @@
 from aiogram import Dispatcher, Router
 
-
 router = Router()
 
 
+# from aiogram.types import Message
 # from bot.filters import ChatTypesFilter
 # from bot.utils.throttling import rate_limit
 #
 # @rate_limit()
 # @router.message(ChatTypesFilter('private'))
-# async def handler_command_start(message: Message):
-#     await message.answer(text=f'Hello, {message.from_user.full_name}')
+# async def handler_echo(message: Message):
+#     await message.answer(text=message.text)
 
 
 def setup(*, dispatcher: Dispatcher):
