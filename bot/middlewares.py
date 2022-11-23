@@ -6,13 +6,21 @@ from aiogram.types import Message
 from cachetools import TTLCache
 
 import loggers
-from bot.utils.throttling import Throttling, parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
+from bot.utils.throttling import parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
+from bot.exceptions import Throttling
 from config import settings
 
 
 class MessageThrottlingMiddleware(BaseMiddleware):
     """
     Throttling messages
+    If the user exceeds the limit of sent messages, described in settings.THROTTLES,
+    the bot will stop responding to his messages.
+    The bot will start responding to the user's messages
+    again as soon as it stops flooding messages and restores its limits
+
+    In _throttle_message define logic throttle message
+    In _process_message_throttling define the behavior of the bot to flood the user
     """
     storage = {
         name: TTLCache(maxsize=10_000, ttl=parse_seconds_by_throttle_name(name)) for name in settings.THROTTLES.keys()
@@ -21,9 +29,7 @@ class MessageThrottlingMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable, event: Message, data: dict) -> Any:  # pragma: no cover
         callback_handler = data['handler'].callback
 
-        handler_has_throttling_key = hasattr(callback_handler, settings.THROTTLING_KEY)
-
-        if event.chat.type != 'private' or not handler_has_throttling_key:
+        if not hasattr(callback_handler, settings.THROTTLING_KEY):
             return await handler(event, data)
 
         name = getattr(callback_handler, settings.THROTTLING_KEY)
@@ -48,19 +54,25 @@ class MessageThrottlingMiddleware(BaseMiddleware):
         number_of_messages = parse_number_of_messages_by_throttle_name(name)
 
         if self.storage[name][key] > number_of_messages:
+            loggers.bot.debug(
+                f'Message throttled [nameThrottle:{name}] [numberOfMessages:{number_of_messages}] [key:{key}]'
+            )
             raise Throttling()
 
     async def _process_message_throttling(self, name: str, message: Message):
         """Process message throttling"""
-        key = self._make_key(message)
-        number_of_messages = parse_number_of_messages_by_throttle_name(name)
+        # key = self._make_key(message)
+        # number_of_messages = parse_number_of_messages_by_throttle_name(name)
 
-        if message.chat.type == 'private':
-            if self.storage[name][key] == number_of_messages + 1:
-                await message.answer(f'Flood! You are temporarily muted, please wait!')
+        # You can separate behavior in private chats and group/supergroup chats.
 
-        elif message.chat.type in {'group', 'supergroup'}:
-            await message.chat.ban_sender_chat(message.from_user.id)
+        # if message.chat.type == 'private':
+        #     if self.storage[name][key] == number_of_messages + 1:
+        #         await message.answer(f'Flood! You are temporarily muted, please wait!')
+        #
+        # elif message.chat.type in {'group', 'supergroup'}:
+        #     if self.storage[name][key] == number_of_messages + 1:
+        #         await message.chat.ban_sender_chat(message.from_user.id)
 
     def _make_key(self, message: Message) -> str:
         key = '{chat_id}:{user_id}'.format(
