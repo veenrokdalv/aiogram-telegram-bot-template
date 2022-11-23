@@ -5,10 +5,6 @@
     "simple": {
       "format": "%(asctime)s | %(levelname)8s | %(name)s | %(message)s",
       "datefm": "%d/%m/%Y %H:%M:%S"
-    },
-    "detail": {
-      "format": "%(asctime)s | %(levelname)8s | %(name)s | %(module)s:%(lineno)d | %(funcName)s  | %(message)s",
-      "datefm": "%d/%m/%Y %H:%M:%S"
     }
   },
   "handlers": {
@@ -42,7 +38,6 @@
       ],
       "level": "DEBUG",
       "propagate": 0
-    },
-
+    }
   }
 }
