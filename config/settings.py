@@ -19,7 +19,7 @@ DEFAULT_TIME_ZONE = ZoneInfo('Europe/Moscow')
 SHORT_DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
 
 THROTTLES = {
-    'default': '5/10s'
+    'default': '5/1s'  # 5 messages per second
 }
 
 del env
