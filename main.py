@@ -33,12 +33,12 @@ async def main():
     await dispatcher.start_polling(*bots, **extra_data)
 
 
+loggers.setup()
+
 if __name__ == '__main__':
-    loggers.setup()
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         logger.warning('Stopped!')
-
 else:
     logger.warning('Use: python main.py')
