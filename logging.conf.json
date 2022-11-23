@@ -15,7 +15,7 @@
     },
     "file": {
       "level": "INFO",
-      "formatter": "detail",
+      "formatter": "simple",
       "class": "logging.handlers.TimedRotatingFileHandler",
       "filename": "./logs.log",
       "when": "d",
