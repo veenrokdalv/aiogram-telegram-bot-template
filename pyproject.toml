@@ -11,6 +11,7 @@ aiogram = {url = "https://github.com/aiogram/aiogram/archive/refs/heads/dev-3.x.
 python-environ = "^0.4.54"
 cachetools = "^5.2.0"
 pytimeparse = "^1.1.8"
+babel = "^2.11.0"
 
 
 [build-system]

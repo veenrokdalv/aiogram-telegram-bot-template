@@ -1,14 +1,46 @@
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 from aiogram import BaseMiddleware
 from aiogram import Dispatcher
-from aiogram.types import Message
+from aiogram.types import Message, Update, User
+from aiogram.utils.i18n import I18nMiddleware, I18n
+from babel import Locale, UnknownLocaleError
 from cachetools import TTLCache
 
 import loggers
 from bot.utils.throttling import parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
 from bot.exceptions import Throttling
 from config import settings
+
+
+class TranslationMiddleware(I18nMiddleware):
+
+    def __init__(self, i18n: I18n):
+        self.i18n = i18n
+
+        super().__init__(i18n=self.i18n)
+
+    async def get_locale(self, event: Update, data: dict[str, Any]) -> str:
+        locale = None
+
+        if 'event_from_user' in data:
+            locale = self._get_locale_from_event_user(data['event_from_user'])
+
+        if locale is None:
+            locale = settings.DEFAULT_LANGUAGE_CODE
+
+        return locale
+
+    def _get_locale_from_event_user(self, user: User) -> str | None:
+        try:
+            locale = Locale.parse(user.language_code, sep="-")
+        except UnknownLocaleError:
+            return None
+
+        if locale.language not in self.i18n.available_locales:
+            return None
+
+        return cast(str, locale.language)
 
 
 class MessageThrottlingMiddleware(BaseMiddleware):
@@ -85,3 +117,4 @@ class MessageThrottlingMiddleware(BaseMiddleware):
 def setup(*, dispatcher: Dispatcher, **kwargs):
     loggers.bot.debug('Setup middlewares')
     dispatcher.message.middleware.register(MessageThrottlingMiddleware())
+    dispatcher.update.middleware.register(TranslationMiddleware(i18n=kwargs['i18n']))

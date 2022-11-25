@@ -1,7 +1,40 @@
 from aiogram.filters import Filter
+from aiogram.filters.text import TextType
 from aiogram.types import Message, CallbackQuery, InlineQuery
+from aiogram.utils.i18n import I18n
+from cachetools.func import lru_cache
 
 import loggers
+from config import settings
+
+
+class InternationalMessageTextFilter(Filter):
+    __slots__ = ("text",)
+
+    def __init__(self, *text: TextType):
+        """
+        :param text: Text equals value or one of values
+        """
+        self._text = set(text)
+
+    def __str__(self) -> str:
+        return self._signature_to_string(text=self.text, )
+
+    @lru_cache
+    def get_text(self, i18n: I18n):
+        return {i18n.gettext(_text, locale=settings.DEFAULT_LANGUAGE_CODE) for _text in self._text}
+
+    async def __call__(self, message: Message, i18n: I18n):
+        message_text = message.text or message.caption or ""
+
+        if not message_text:
+            return False
+
+        message_text = i18n.gettext(message_text, locale=settings.DEFAULT_LANGUAGE_CODE)
+
+        text = self.get_text(i18n=i18n)
+
+        return message_text in text
 
 
 class ChatTypesFilter(Filter):
