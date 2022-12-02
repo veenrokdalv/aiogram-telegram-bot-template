@@ -1,6 +1,6 @@
 from typing import Any, Callable, cast
 
-from aiogram import BaseMiddleware
+from aiogram import BaseMiddleware, Bot
 from aiogram import Dispatcher
 from aiogram.types import Message, Update, User
 from aiogram.utils.i18n import I18nMiddleware, I18n
@@ -60,13 +60,14 @@ class MessageThrottlingMiddleware(BaseMiddleware):
 
     async def __call__(self, handler: Callable, event: Message, data: dict) -> Any:  # pragma: no cover
         callback_handler = data['handler'].callback
+        bot = data['bot']
 
         if not hasattr(callback_handler, settings.THROTTLING_KEY):
             return await handler(event, data)
 
         name = getattr(callback_handler, settings.THROTTLING_KEY)
 
-        key = self._make_key(event)
+        key = self._make_key(bot, event)
 
         if key not in self.storage[name]:
             self.storage[name][key] = 0
@@ -74,15 +75,15 @@ class MessageThrottlingMiddleware(BaseMiddleware):
         self.storage[name][key] += 1
 
         try:
-            await self._throttle_message(name, event)
+            await self._throttle_message(name, bot, event)
         except Throttling:
-            await self._process_message_throttling(name, event)
+            await self._process_message_throttling(name, bot, event)
         else:
             return await handler(event, data)
 
-    async def _throttle_message(self, name: str, message: Message):
+    async def _throttle_message(self, name: str, bot: Bot, message: Message):
         """Throttle message"""
-        key = self._make_key(message)
+        key = self._make_key(bot, message)
         number_of_messages = parse_number_of_messages_by_throttle_name(name)
 
         if self.storage[name][key] > number_of_messages:
@@ -91,9 +92,9 @@ class MessageThrottlingMiddleware(BaseMiddleware):
             )
             raise Throttling()
 
-    async def _process_message_throttling(self, name: str, message: Message):
+    async def _process_message_throttling(self, name: str, bot: Bot, message: Message):
         """Process message throttling"""
-        # key = self._make_key(message)
+        # key = self._make_key(bot, message)
         # number_of_messages = parse_number_of_messages_by_throttle_name(name)
 
         # You can separate behavior in private chats and group/supergroup chats.
@@ -106,8 +107,9 @@ class MessageThrottlingMiddleware(BaseMiddleware):
         #     if self.storage[name][key] == number_of_messages + 1:
         #         await message.chat.ban_sender_chat(message.from_user.id)
 
-    def _make_key(self, message: Message) -> str:
-        key = '{chat_id}:{user_id}'.format(
+    def _make_key(self, bot: Bot, message: Message) -> str:
+        key = '{bot_id}:{chat_id}:{user_id}'.format(
+            bot_id=bot.id,
             chat_id=message.chat.id,
             user_id=message.from_user.id,
         )
