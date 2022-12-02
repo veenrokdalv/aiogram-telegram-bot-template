@@ -28,3 +28,6 @@ THROTTLING_KEY = '_throttling_key'
 THROTTLES = {
     'default': '5/1s'  # 5 messages per second
 }
+
+REDIS_HOST = _env.str('REDIS_HOST')
+REDIS_PORT = _env.str('REDIS_PORT')

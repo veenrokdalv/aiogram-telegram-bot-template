@@ -12,6 +12,8 @@ python-environ = "^0.4.54"
 cachetools = "^5.2.0"
 pytimeparse = "^1.1.8"
 babel = "^2.11.0"
+aioredis = "^2.0.1"
+redis = "^4.3.5"
 
 
 [build-system]

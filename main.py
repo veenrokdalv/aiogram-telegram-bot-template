@@ -3,8 +3,10 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
 from aiogram.fsm.strategy import FSMStrategy
 from aiogram.utils.i18n import I18n
+from aioredis import Redis
 
 from bot import handlers, middlewares
 from config import settings
@@ -22,8 +24,13 @@ async def main():
 
     bots = [Bot(token=_token, parse_mode=settings.PARSE_MODE) for _token in settings.TELEGRAM_BOT_TOKENS]
 
+    storage = RedisStorage(
+        redis=Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT),
+        key_builder=DefaultKeyBuilder(with_bot_id=True, with_destiny=True,)
+    )
+
     dispatcher = Dispatcher(
-        storage=MemoryStorage(),
+        storage=storage,
         fsm_strategy=FSMStrategy.USER_IN_CHAT,
     )
 
