@@ -2,13 +2,12 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
 from aiogram.fsm.strategy import FSMStrategy
 from aiogram.utils.i18n import I18n
 from aioredis import Redis
 
-import db
 from bot import handlers, middlewares
 from config import settings
 import loggers
@@ -35,16 +34,11 @@ async def main():
         fsm_strategy=FSMStrategy.USER_IN_CHAT,
     )
 
-    db_engine,  db_session = db.utils.setup()
-
     middlewares.setup(dispatcher=dispatcher, i18n=i18n)
     handlers.setup(dispatcher=dispatcher)
 
     extra_data = {
         'i18n': i18n,
-        'db_engine': db_engine,
-        'db_session': db_session,
-
     }
 
     await dispatcher.start_polling(*bots, **extra_data)
