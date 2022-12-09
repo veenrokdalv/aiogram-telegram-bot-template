@@ -1,21 +1,19 @@
-import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
 from aiogram.fsm.strategy import FSMStrategy
 from aiogram.utils.i18n import I18n
 from aioredis import Redis
 
+import loggers
 from bot import handlers, middlewares
 from config import settings
-import loggers
 
 logger = logging.getLogger(__name__)
 
 
-async def main():
+def main():
     """Point of entry"""
 
     logger.debug('Building bots')
@@ -41,14 +39,14 @@ async def main():
         'i18n': i18n,
     }
 
-    await dispatcher.start_polling(*bots, **extra_data)
+    dispatcher.run_polling(*bots, **extra_data)
 
 
 loggers.setup()
 
 if __name__ == '__main__':
     try:
-        asyncio.run(main())
+        main()
     except KeyboardInterrupt:
         logger.warning('Stopped!')
 else:
