@@ -1,15 +1,14 @@
 from aiogram import Dispatcher
+from aiohttp.web_app import Application
 
 import loggers
 from bot.handlers import hooks, private, group, channel
 
 
-def setup(*, dispatcher: Dispatcher):
+def setup(*, dispatcher: Dispatcher, web_app: Application):
     loggers.bot.debug('Setup handlers')
 
     private.setup(dispatcher=dispatcher)
     group.setup(dispatcher=dispatcher)
     channel.setup(dispatcher=dispatcher)
-
-    dispatcher.startup.register(hooks.on_startup)
-    dispatcher.shutdown.register(hooks.on_shutdown)
+    hooks.setup(dispatcher=dispatcher)
