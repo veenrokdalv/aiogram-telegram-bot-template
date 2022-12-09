@@ -6,12 +6,18 @@ from config import settings
 
 
 async def on_startup(bots: list[Bot], i18n: I18n):
-    webhook_url_postfix = 'webhook/{bot.id}'
     for bot in bots:
         await set_my_commands(bot=bot, i18n=i18n)
-        await bot.set_webhook(settings.WEBHOOK_BASE_URL + webhook_url_postfix.format(bot=bot))
+        await bot.set_webhook(
+            url=settings.WEBHOOK_URL.format(bot_token=bot.token),
+            secret_token=settings.SECRET_KEY,
+            drop_pending_updates=True,
+        )
 
 
 async def on_shutdown(bots: list[Bot]):
     for bot in bots:
         await bot.delete_my_commands()
+        await bot.delete_webhook(
+            drop_pending_updates=True,
+        )
