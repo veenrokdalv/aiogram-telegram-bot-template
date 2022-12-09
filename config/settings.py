@@ -29,5 +29,7 @@ THROTTLES = {
     'default': '5/1s'  # 5 messages per second
 }
 
+WEBHOOK_URL = _env.str('WEBHOOK_URL')
+
 REDIS_HOST = _env.str('REDIS_HOST')
 REDIS_PORT = _env.str('REDIS_PORT')
