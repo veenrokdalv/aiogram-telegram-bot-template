@@ -8,6 +8,7 @@ import loggers
 
 
 def setup_webhook(*bots: Bot, dispatcher: Dispatcher, **extra_data):
+    loggers.bot.debug('Setup webhooks')
     webhook_url_postfix = 'webhook/{bot.id}'
     web_app = Application()
     for bot in bots:
