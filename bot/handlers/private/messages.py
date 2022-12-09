@@ -1,8 +1,7 @@
 from aiogram import Dispatcher, Router
-from aiogram.filters import Text
-
 
 router = Router()
+
 
 # from aiogram.types import Message
 # from aiogram.utils.i18n import I18n

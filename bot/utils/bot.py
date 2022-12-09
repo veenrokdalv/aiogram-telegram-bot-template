@@ -7,7 +7,7 @@ from aiohttp.web_app import Application
 import loggers
 
 
-def setup_webhook(*bots: Bot, dispatcher: Dispatcher, **extra_data) -> Application:
+def setup_webhook(*bots: Bot, dispatcher: Dispatcher, **extra_data):
     webhook_url_postfix = 'webhook/{bot.id}'
     web_app = Application()
     for bot in bots:

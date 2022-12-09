@@ -1,6 +1,5 @@
 from aiogram import Dispatcher
 
-import loggers
 from bot.handlers.group import messages, service_messages, callback_query, inlne_query
 
 

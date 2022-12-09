@@ -1,19 +1,15 @@
-import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
 from aiogram.fsm.strategy import FSMStrategy
 from aiogram.utils.i18n import I18n
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, TokenBasedRequestHandler
-from aiohttp.web_app import Application
 from aioredis import Redis
 
+import loggers
 from bot import handlers, middlewares
 from bot.utils.bot import setup_webhook
 from config import settings
-import loggers
 
 logger = logging.getLogger(__name__)
 

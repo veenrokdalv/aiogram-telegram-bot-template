@@ -8,8 +8,8 @@ from babel import Locale, UnknownLocaleError
 from cachetools import TTLCache
 
 import loggers
-from bot.utils.throttling import parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
 from bot.exceptions import Throttling
+from bot.utils.throttling import parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
 from config import settings
 
 
