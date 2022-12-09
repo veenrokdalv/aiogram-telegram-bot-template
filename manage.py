@@ -24,14 +24,21 @@ def cli():
 
 
 @cli.command(name='webhook')
-@click.option('-wu', '--webhook-url', required=True)
+@click.argument('webhook-url')
 @click.option('-sh', '--server-host', default='localhost')
 @click.option('-sp', '--server-port', default=8000)
 @click.option('-sk', '--secret-key', default=None)
 @click.option('--drop-pending-updates/--no-drop-pending-updates', default=True)
-def start_webhook(webhook_url: str, server_host: str, server_port: int, secret_key: str | None,
-                  drop_pending_updates: bool):
+def start_webhook(
+        webhook_url: str,
+        server_host: str,
+        server_port: int,
+        secret_key: str | None,
+        drop_pending_updates: bool
+):
     i18n, storage, dispatcher, bots, bot_settings, extra_data, web_app = _setup()
+    loggers.bot.debug('Start webhook')
+
     extra_data.update({
         'webhook_url': webhook_url,
         'server_host': server_host,
@@ -41,8 +48,10 @@ def start_webhook(webhook_url: str, server_host: str, server_port: int, secret_k
     })
 
     webhook_url_info = urlparse(webhook_url)
+
     web_handler = TokenBasedRequestHandler(dispatcher=dispatcher, bot_settings=bot_settings, **extra_data)
     web_handler.register(web_app, path=webhook_url_info.path)
+
     setup_application(web_app, dispatcher, bots=bots, **extra_data)
     run_app(app=web_app, host=server_host, port=server_port)
 
@@ -50,6 +59,8 @@ def start_webhook(webhook_url: str, server_host: str, server_port: int, secret_k
 @cli.command(name='polling')
 def start_polling():
     i18n, storage, dispatcher, bots, bot_settings, extra_data, web_app = _setup()
+    loggers.bot.debug('Start polling')
+
     dispatcher.run_polling(*bots, **extra_data)
 
 
@@ -73,13 +84,14 @@ def _setup() -> tuple[I18n, BaseStorage, Dispatcher, list[Bot], dict, dict, Appl
         fsm_strategy=FSMStrategy.USER_IN_CHAT,
     )
 
+    web_app = Application()
+
     middlewares.setup(dispatcher=dispatcher, i18n=i18n)
-    handlers.setup(dispatcher=dispatcher)
+    handlers.setup(dispatcher=dispatcher, web_app=web_app)
 
     extra_data = {
         'i18n': i18n,
     }
-    web_app = Application()
 
     return i18n, storage, dispatcher, bots, bot_settings, extra_data, web_app
 
