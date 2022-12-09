@@ -24,7 +24,7 @@ def main():
 
     storage = RedisStorage(
         redis=Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT),
-        key_builder=DefaultKeyBuilder(with_bot_id=True, with_destiny=True,)
+        key_builder=DefaultKeyBuilder(with_bot_id=True, with_destiny=True, )
     )
 
     dispatcher = Dispatcher(

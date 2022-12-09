@@ -1,5 +1,4 @@
 from aiogram import Bot
-
 from aiogram.utils.i18n import I18n
 
 import loggers
@@ -23,4 +22,3 @@ async def set_my_commands(bot: Bot, i18n: I18n):
         #     language_code=locale,
         #     scope=BotCommandScopeAllPrivateChats
         # )
-
