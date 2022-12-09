@@ -1,18 +1,15 @@
 from aiogram import Dispatcher, Router
+from aiogram.types import Message
+from aiogram.utils.i18n import I18n
+
+from bot.filters import ChatTypesFilter
 
 router = Router()
 
 
-# from aiogram.types import Message
-# from aiogram.utils.i18n import I18n
-#
-# from bot.filters import ChatTypesFilter, InternationalMessageTextFilter
-# from bot.utils.throttling import rate_limit
-#
-#
-# @rate_limit()
-# @router.message(InternationalMessageTextFilter(button_menu), ChatTypesFilter('private'))
-# async def handler_echo(message: Message, i18n: I18n):
+
+# @router.message(ChatTypesFilter('private'))
+# async def handler_all_message(message: Message, i18n: I18n):
 #     await message.answer(
 #         text=i18n.gettext(
 #             'Hi, {user_fullname}'
