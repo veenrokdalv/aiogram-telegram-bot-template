@@ -12,5 +12,4 @@ def setup(*, dispatcher: Dispatcher, web_app: Application):
     group.setup(dispatcher=dispatcher)
     channel.setup(dispatcher=dispatcher)
     hooks.setup(dispatcher=dispatcher)
-
     web.setup(web_app=web_app)
