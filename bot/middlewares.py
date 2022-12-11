@@ -8,7 +8,7 @@ from babel import Locale, UnknownLocaleError
 from cachetools import TTLCache
 
 import loggers
-from bot.exceptions import Throttling
+from bot.exceptions import Throttled
 from bot.utils.throttling import parse_number_of_messages_by_throttle_name, parse_seconds_by_throttle_name
 from config import settings
 
@@ -45,7 +45,7 @@ class TranslationMiddleware(I18nMiddleware):
 
 class MessageThrottlingMiddleware(BaseMiddleware):
     """
-    Throttling messages
+    Throttled messages
     If the user exceeds the limit of sent messages, described in settings.THROTTLES,
     the bot will stop responding to his messages.
     The bot will start responding to the user's messages
@@ -76,7 +76,7 @@ class MessageThrottlingMiddleware(BaseMiddleware):
 
         try:
             await self._throttle_message(name, bot, event)
-        except Throttling:
+        except Throttled:
             await self._process_message_throttling(name, bot, event)
         else:
             return await handler(event, data)
@@ -90,7 +90,7 @@ class MessageThrottlingMiddleware(BaseMiddleware):
             loggers.bot.debug(
                 f'Message throttled [nameThrottle:{name}] [numberOfMessages:{number_of_messages}] [key:{key}]'
             )
-            raise Throttling()
+            raise Throttled()
 
     async def _process_message_throttling(self, name: str, bot: Bot, message: Message):
         """Process message throttling"""

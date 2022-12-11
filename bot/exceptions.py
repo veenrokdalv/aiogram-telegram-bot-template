@@ -1,2 +1,2 @@
-class Throttling(Exception):
+class Throttled(Exception):
     pass
